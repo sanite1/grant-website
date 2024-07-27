@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import * as React from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
@@ -12,12 +12,6 @@ const Services = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const [expanded, setExpanded] = useState(false);
-
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
 
   return (
     <Box>

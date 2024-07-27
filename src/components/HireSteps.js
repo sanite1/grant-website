@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Link, Typography } from "@mui/material";
+import { Box, Grid, Link, Typography } from "@mui/material";
 import hire_steps from "../assets/images/hire_steps.webp";
 
 const HireSteps = () => {
@@ -28,7 +28,6 @@ const HireSteps = () => {
           letterSpacing: "2px",
           lineHeight: "1.5",
           //   color: "white",
-          marginBottom: "20px",
         }}
       >
         Hire In 3 Steps!
@@ -291,6 +290,7 @@ const HireSteps = () => {
                   width: "100%",
                 }}
                 src={hire_steps}
+                alt="step"
               />
             </Box>
           </Box>

@@ -9,10 +9,8 @@ import {
 } from "@mui/material";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import XIcon from "@mui/icons-material/X";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { FaFacebookF } from "react-icons/fa";
 import { FaLinkedinIn } from "react-icons/fa";
-import FacebookIcon from "@mui/icons-material/Facebook";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import { FaWhatsapp } from "react-icons/fa";
 
