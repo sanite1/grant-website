@@ -8,6 +8,84 @@ import Service from "../components/ServiceStack";
 import backgroundImage from "../assets/images/blury_home_background.avif";
 import introImage from "../assets/images/service_intro.webp";
 
+import { useInView } from "react-intersection-observer";
+
+import { keyframes } from "@emotion/react";
+
+const slideFromLeft = keyframes`
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+
+const slideFromRight = keyframes`
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+
+const slideFromDown = keyframes`
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+`;
+
+const appear = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const AnimatedBox = ({ children, direction }) => {
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
+  let animation;
+  switch (direction) {
+    case "left":
+      animation = slideFromLeft;
+      break;
+    case "right":
+      animation = slideFromRight;
+      break;
+    case "down":
+      animation = slideFromDown;
+      break;
+    case "appear":
+      animation = appear;
+      break;
+    default:
+      animation = appear;
+  }
+
+  return (
+    <Box
+      ref={ref}
+      sx={{
+        animation: inView ? `${animation} 1s ease-out` : "none",
+      }}
+    >
+      {children}
+    </Box>
+  );
+};
+
 const Services = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -29,11 +107,12 @@ const Services = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+          marginTop: "10vh",
         }}
       >
         <Grid container spacing={5}>
           <Grid item xs={12} md={6}>
-            <Box>
+            <AnimatedBox direction="left">
               <img
                 style={{
                   width: "100%",
@@ -44,7 +123,7 @@ const Services = () => {
                 src={introImage}
                 alt="Home Intro"
               />
-            </Box>
+            </AnimatedBox>
           </Grid>
           <Grid item xs={12} md={6}>
             <Box
@@ -56,7 +135,7 @@ const Services = () => {
                 flexWrap: "wrap",
               }}
             >
-              <Box>
+              <AnimatedBox direction="right">
                 <Typography variant="body2" sx={{ color: "#eda932" }}>
                   Services
                 </Typography>
@@ -89,7 +168,7 @@ const Services = () => {
                   grant successfully, allowing you to focus on making a
                   difference.
                 </Typography>
-              </Box>
+              </AnimatedBox>
             </Box>
           </Grid>
         </Grid>
@@ -97,7 +176,9 @@ const Services = () => {
 
       {/* services  */}
 
-      <Service />
+      <AnimatedBox direction="down">
+        <Service />
+      </AnimatedBox>
       <Footer />
     </Box>
   );

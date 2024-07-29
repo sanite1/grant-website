@@ -7,6 +7,83 @@ import Bockbone from "../assets/images/backbone_image.jpeg";
 import WhyUs from "../components/WhyUs";
 import HireSteps from "../components/HireSteps";
 import Footer from "../components/Footer";
+import { useInView } from "react-intersection-observer";
+
+import { keyframes } from "@emotion/react";
+
+const slideFromLeft = keyframes`
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+
+const slideFromRight = keyframes`
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+
+const slideFromDown = keyframes`
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+`;
+
+const appear = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const AnimatedBox = ({ children, direction }) => {
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
+  let animation;
+  switch (direction) {
+    case "left":
+      animation = slideFromLeft;
+      break;
+    case "right":
+      animation = slideFromRight;
+      break;
+    case "down":
+      animation = slideFromDown;
+      break;
+    case "appear":
+      animation = appear;
+      break;
+    default:
+      animation = appear;
+  }
+
+  return (
+    <Box
+      ref={ref}
+      sx={{
+        animation: inView ? `${animation} 1s ease-out` : "none",
+      }}
+    >
+      {children}
+    </Box>
+  );
+};
 
 const Home = () => {
   return (
@@ -24,24 +101,52 @@ const Home = () => {
           boxSizing: "border-box",
           display: "flex",
           alignItems: "center",
+          marginTop: "10vh",
         }}
       >
         <Grid container spacing={5}>
-          <Grid item xs={12} md={6}>
-            <Box>
-              <img
-                style={{
+          <Grid
+            item
+            xs={12}
+            md={6}
+            sx={{
+              order: { xs: 2, md: 1 },
+            }}
+          >
+            <AnimatedBox direction="left">
+              <Box
+                sx={{
                   width: "100%",
-                  height: "80vh",
-                  objectFit: "cover",
-                  borderRadius: "50%",
+                  height: {
+                    xs: "40vh",
+                    md: "80vh",
+                  },
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-                src={IntroPic}
-                alt="Home Intro"
-              />
-            </Box>
+              >
+                <img
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "50%",
+                  }}
+                  src={IntroPic}
+                  alt="Home Intro"
+                />
+              </Box>
+            </AnimatedBox>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            sx={{
+              order: { xs: 1, md: 2 },
+            }}
+          >
             <Box
               sx={{
                 display: "flex",
@@ -49,9 +154,10 @@ const Home = () => {
                 alignItems: "center",
                 height: "100%",
                 flexWrap: "wrap",
+                marginTop: { xs: "30px", md: "0" },
               }}
             >
-              <Box>
+              <AnimatedBox direction="right">
                 <Typography
                   variant="h3"
                   sx={{
@@ -83,19 +189,27 @@ const Home = () => {
                     Spend less time writing and achieve more success.
                   </strong>
                 </Typography>
-                <Button
-                  sx={{
-                    background: "#6367e4",
-                    outline: "none",
-                    borderRadius: "30px",
-                    color: "white",
-                    padding: "15px 24px",
-                    marginTop: "20px",
-                  }}
-                >
-                  Hire a Grant Writer
-                </Button>
-              </Box>
+                <>
+                  <Link
+                    href="/hire-a-grant-writer"
+                    color="inherit"
+                    underline="none"
+                    sx={{
+                      background: "#6367e4",
+                      outline: "none",
+                      borderRadius: "30px",
+                      color: "white",
+                      padding: "15px 24px",
+                      marginTop: "20px",
+                      float: "left",
+                      fontFamily: "sans-serif",
+                      letterSpacing: "1px",
+                    }}
+                  >
+                    Hire A Grant Writer
+                  </Link>
+                </>
+              </AnimatedBox>
             </Box>
           </Grid>
         </Grid>
@@ -103,76 +217,119 @@ const Home = () => {
 
       {/* Winning Grants  */}
 
-      <Box
-        sx={{
-          background: "#333333",
-          textAlign: "center",
-          //   width: "80%",
-          margin: "auto",
-          padding: "30px 10% 50px",
-        }}
-      >
-        <Typography variant="body2" sx={{ color: "#eda932" }}>
-          The List is Wide
-        </Typography>
-        <Typography
-          variant="h4"
+      <AnimatedBox direction="down">
+        <Box
           sx={{
-            width: "100%",
-            fontFamily: '"Inria Serif", serif',
-            fontWeight: 700,
-            fontStyle: "italic",
-            marginBottom: "20px",
-            letterSpacing: "2px",
-            lineHeight: "1.5",
-            color: "white",
+            background: "#333333",
+            textAlign: "center",
+            //   width: "80%",
+            margin: "auto",
+            padding: "30px 10% 50px",
           }}
         >
-          Some Grants Our Writers Have Won
-        </Typography>
-        <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-          <img
-            style={{
-              width: "15%",
-              objectFit: "cover",
+          <Typography variant="body2" sx={{ color: "#eda932" }}>
+            The List is Wide
+          </Typography>
+          <Typography
+            variant="h4"
+            sx={{
+              width: "100%",
+              fontFamily: '"Inria Serif", serif',
+              fontWeight: 700,
+              fontStyle: "italic",
+              marginBottom: "20px",
+              letterSpacing: "2px",
+              lineHeight: "1.5",
+              color: "white",
             }}
-            src={TrustedPic}
-            alt="Home trusted"
-          />
-          <img
-            style={{
-              width: "15%",
-              objectFit: "cover",
+          >
+            Some Grants Our Writers Have Won
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              flexWrap: "wrap",
             }}
-            src={TrustedPic}
-            alt="Home trusted"
-          />
-          <img
-            style={{
-              width: "15%",
-              objectFit: "cover",
-            }}
-            src={TrustedPic}
-            alt="Home trusted"
-          />
-          <img
-            style={{
-              width: "15%",
-              objectFit: "cover",
-            }}
-            src={TrustedPic}
-            alt="Home trusted"
-          />
-          <img
-            style={{
-              width: "15%",
-              objectFit: "cover",
-            }}
-            src={TrustedPic}
-            alt="Home trusted"
-          />
+          >
+            <Box
+              sx={{
+                width: { xs: "45%", md: "15%" },
+                marginBottom: { xs: "10px", md: "0" },
+              }}
+            >
+              <img
+                style={{
+                  width: "100%",
+                  objectFit: "cover",
+                }}
+                src={TrustedPic}
+                alt="Home trusted"
+              />
+            </Box>
+            <Box
+              sx={{
+                width: { xs: "45%", md: "15%" },
+                marginBottom: { xs: "10px", md: "0" },
+              }}
+            >
+              <img
+                style={{
+                  width: "100%",
+                  objectFit: "cover",
+                }}
+                src={TrustedPic}
+                alt="Home trusted"
+              />
+            </Box>
+            <Box
+              sx={{
+                width: { xs: "45%", md: "15%" },
+                marginBottom: { xs: "10px", md: "0" },
+              }}
+            >
+              <img
+                style={{
+                  width: "100%",
+                  objectFit: "cover",
+                }}
+                src={TrustedPic}
+                alt="Home trusted"
+              />
+            </Box>
+            <Box
+              sx={{
+                width: { xs: "45%", md: "15%" },
+                marginBottom: { xs: "10px", md: "0" },
+              }}
+            >
+              <img
+                style={{
+                  width: "100%",
+                  objectFit: "cover",
+                }}
+                src={TrustedPic}
+                alt="Home trusted"
+              />
+            </Box>
+            <Box
+              sx={{
+                width: { xs: "45%", md: "15%" },
+                marginBottom: { xs: "10px", md: "0" },
+              }}
+            >
+              <img
+                style={{
+                  width: "100%",
+                  objectFit: "cover",
+                }}
+                src={TrustedPic}
+                alt="Home trusted"
+              />
+            </Box>
+          </Box>
         </Box>
-      </Box>
+      </AnimatedBox>
 
       {/* Bockbone Text  */}
 
@@ -192,18 +349,18 @@ const Home = () => {
       >
         <Grid container spacing={5}>
           <Grid item xs={12} md={6}>
-            <Box>
+            <AnimatedBox direction="left">
               <img
                 style={{
                   width: "100%",
-                  height: "60vh",
+                  height: { xs: "40vh", md: "60vh" },
                   //   objectFit: "cover",
                   borderRadius: "10% 0 10% 0",
                 }}
                 src={Bockbone}
                 alt="Home Intro"
               />
-            </Box>
+            </AnimatedBox>
           </Grid>
           <Grid item xs={12} md={6}>
             <Box
@@ -215,7 +372,7 @@ const Home = () => {
                 flexWrap: "wrap",
               }}
             >
-              <Box>
+              <AnimatedBox direction="right">
                 <Typography variant="body2" sx={{ color: "#eda932" }}>
                   Our Drive
                 </Typography>
@@ -266,7 +423,7 @@ const Home = () => {
                     Hire A Grant Writer
                   </Link>
                 </>
-              </Box>
+              </AnimatedBox>
             </Box>
           </Grid>
         </Grid>

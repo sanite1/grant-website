@@ -1,6 +1,84 @@
 import { Box, Grid, Link, Typography } from "@mui/material";
 import hire_steps from "../assets/images/hire_steps.webp";
 
+import { useInView } from "react-intersection-observer";
+
+import { keyframes } from "@emotion/react";
+
+const slideFromLeft = keyframes`
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+
+const slideFromRight = keyframes`
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+
+const slideFromDown = keyframes`
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+`;
+
+const appear = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const AnimatedBox = ({ children, direction }) => {
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
+  let animation;
+  switch (direction) {
+    case "left":
+      animation = slideFromLeft;
+      break;
+    case "right":
+      animation = slideFromRight;
+      break;
+    case "down":
+      animation = slideFromDown;
+      break;
+    case "appear":
+      animation = appear;
+      break;
+    default:
+      animation = appear;
+  }
+
+  return (
+    <Box
+      ref={ref}
+      sx={{
+        animation: inView ? `${animation} 1s ease-out` : "none",
+      }}
+    >
+      {children}
+    </Box>
+  );
+};
+
 const HireSteps = () => {
   return (
     <Box
@@ -34,7 +112,7 @@ const HireSteps = () => {
       </Typography>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6}>
-          <Box>
+          <AnimatedBox direction="left">
             <Grid container spacing={0}>
               <Grid item xs={2}>
                 <Box
@@ -73,7 +151,7 @@ const HireSteps = () => {
                   >
                     <Box
                       sx={{
-                        height: "100px",
+                        minHeight: "100px",
                         width: "5px",
                         background: "black",
                       }}
@@ -149,7 +227,7 @@ const HireSteps = () => {
                   >
                     <Box
                       sx={{
-                        height: "150px",
+                        minHeight: "150px",
                         width: "5px",
                         background: "black",
                       }}
@@ -274,7 +352,7 @@ const HireSteps = () => {
                 Hire A Grant Writer
               </Link>
             </>
-          </Box>
+          </AnimatedBox>
         </Grid>
         <Grid item xs={12} md={6}>
           <Box
@@ -284,7 +362,7 @@ const HireSteps = () => {
               height: "100%",
             }}
           >
-            <Box>
+            <AnimatedBox direction="right">
               <img
                 style={{
                   width: "100%",
@@ -292,7 +370,7 @@ const HireSteps = () => {
                 src={hire_steps}
                 alt="step"
               />
-            </Box>
+            </AnimatedBox>
           </Box>
         </Grid>
       </Grid>

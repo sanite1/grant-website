@@ -94,7 +94,11 @@ const Footer = () => {
           </Box>
         </Grid>
         <Grid item xs={12} sm={4} md={2.5}>
-          <Box display={"flex"} justifyContent={"center"} flexWrap={"wrap"}>
+          <Box
+            display={"flex"}
+            justifyContent={{ xs: "start", sm: "center" }}
+            flexWrap={"wrap"}
+          >
             <Box>
               <Typography
                 variant="body1"
@@ -197,7 +201,7 @@ const Footer = () => {
             }}
           >
             Flat 52 The Arcade, {"\n"}
-            N7 0RY London UNITED KINGDOM
+            N7 0RY London, United Kindom
           </Typography>
           <Typography
             variant="body1"
@@ -253,7 +257,7 @@ const Footer = () => {
       <Divider color="white" />
       <Box
         sx={{
-          display: "flex",
+          display: { xs: "", sm: "flex" },
           justifyContent: "space-between",
           alignItems: "center",
           padding: "12px 0",
@@ -284,7 +288,7 @@ const Footer = () => {
               height: "30px",
               background: "white",
               borderRadius: "50%",
-              marginLeft: "16px",
+              marginLeft: { xs: "0", sm: "16px" },
             }}
           >
             <InstagramIcon fontSize="20px" />

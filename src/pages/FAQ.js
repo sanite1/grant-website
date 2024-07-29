@@ -10,6 +10,84 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { faq } from "../data/faq";
 
+import { useInView } from "react-intersection-observer";
+
+import { keyframes } from "@emotion/react";
+
+const slideFromLeft = keyframes`
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+
+const slideFromRight = keyframes`
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+
+const slideFromDown = keyframes`
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+`;
+
+const appear = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const AnimatedBox = ({ children, direction }) => {
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
+  let animation;
+  switch (direction) {
+    case "left":
+      animation = slideFromLeft;
+      break;
+    case "right":
+      animation = slideFromRight;
+      break;
+    case "down":
+      animation = slideFromDown;
+      break;
+    case "appear":
+      animation = appear;
+      break;
+    default:
+      animation = appear;
+  }
+
+  return (
+    <Box
+      ref={ref}
+      sx={{
+        animation: inView ? `${animation} 1s ease-out` : "none",
+      }}
+    >
+      {children}
+    </Box>
+  );
+};
+
 const FAQ = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -31,29 +109,32 @@ const FAQ = () => {
           //   width: "80%",
           margin: "auto",
           padding: "30px 10% 50px",
+          marginTop: "10vh",
         }}
       >
-        <Typography
-          variant="h4"
-          sx={{
-            width: "100%",
-            fontFamily: '"Inria Serif", serif',
-            fontWeight: 700,
-            fontStyle: "italic",
-            marginBottom: "20px",
-            letterSpacing: "2px",
-            lineHeight: "1.5",
-            color: "#333333",
-          }}
-        >
-          How Can We Help You?
-        </Typography>
-        <Typography
-          variant="body2"
-          sx={{ fontFamily: '"Inria Serif", serif', color: "#333333" }}
-        >
-          We've curated a list of frequently asked questions for your perusal.
-        </Typography>
+        <AnimatedBox direction="down">
+          <Typography
+            variant="h4"
+            sx={{
+              width: "100%",
+              fontFamily: '"Inria Serif", serif',
+              fontWeight: 700,
+              fontStyle: "italic",
+              marginBottom: "20px",
+              letterSpacing: "2px",
+              lineHeight: "1.5",
+              color: "#333333",
+            }}
+          >
+            How Can We Help You?
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{ fontFamily: '"Inria Serif", serif', color: "#333333" }}
+          >
+            We've curated a list of frequently asked questions for your perusal.
+          </Typography>
+        </AnimatedBox>
       </Box>
       <Box
         sx={{

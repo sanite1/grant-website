@@ -5,9 +5,87 @@ import Why2 from "../assets/images/why2.webp";
 import Why3 from "../assets/images/why3.webp";
 import Why4 from "../assets/images/why4.webp";
 
+import { useInView } from "react-intersection-observer";
+
+import { keyframes } from "@emotion/react";
+
+const slideFromLeft = keyframes`
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+
+const slideFromRight = keyframes`
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+
+const slideFromDown = keyframes`
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+`;
+
+const appear = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const AnimatedBox = ({ children, direction }) => {
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
+  let animation;
+  switch (direction) {
+    case "left":
+      animation = slideFromLeft;
+      break;
+    case "right":
+      animation = slideFromRight;
+      break;
+    case "down":
+      animation = slideFromDown;
+      break;
+    case "appear":
+      animation = appear;
+      break;
+    default:
+      animation = appear;
+  }
+
+  return (
+    <Box
+      ref={ref}
+      sx={{
+        animation: inView ? `${animation} 1s ease-out` : "none",
+      }}
+    >
+      {children}
+    </Box>
+  );
+};
+
 const WhyUs = () => {
   return (
-    <Box>
+    <AnimatedBox direction="down">
       <Box
         sx={{
           padding: "100px 10%",
@@ -227,7 +305,7 @@ const WhyUs = () => {
           </Grid>
         </Grid>
       </Box>
-    </Box>
+    </AnimatedBox>
   );
 };
 
